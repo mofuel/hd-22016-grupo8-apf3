@@ -1,15 +1,13 @@
-name: Validar HTML
+name: Validar y Desplegar HTML
 
 on:
   push:
-    paths:
-      - '**/*.html'
+    branches: [main]
   pull_request:
-    paths:
-      - '**/*.html'
+    branches: [main]
 
 jobs:
-  html-validation:
+  validate-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +22,12 @@ jobs:
       - name: Instalar htmlhint
         run: npm install -g htmlhint
 
-      - name: Validar archivos HTML
+      - name: Validar HTML
         run: htmlhint "**/*.html"
+
+      - name: Desplegar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./  # Cambia a ./dist si usas un builder
+
